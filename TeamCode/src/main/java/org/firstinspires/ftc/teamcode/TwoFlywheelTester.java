@@ -14,6 +14,8 @@ public class TwoFlywheelTester extends LinearOpMode {
     private DcMotor bl = null;
     private DcMotor fr = null;
     private DcMotor br = null;
+
+    private DcMotor intake = null;
     private DcMotorEx shooter1 = null;
 
     private DcMotorEx shooter2 = null;
@@ -22,6 +24,7 @@ public class TwoFlywheelTester extends LinearOpMode {
         bl = hardwareMap.get(DcMotor.class, "bl");
         fr = hardwareMap.get(DcMotor.class, "fr");
         br = hardwareMap.get(DcMotor.class, "br");
+        intake = hardwareMap.get(DcMotor.class, "intake");
 
         fr.setDirection(DcMotorSimple.Direction.REVERSE);
         br.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -29,8 +32,10 @@ public class TwoFlywheelTester extends LinearOpMode {
         shooter2 = hardwareMap.get(DcMotorEx.class, "shooter2");
         double shooterPower1 = 0;
         double shooterPower2 = 0;
+        double intakePower = 0;
         waitForStart();
         while (opModeIsActive()) {
+            intakePower = gamepad1.left_trigger;
             double y = gamepad1.left_stick_y;
             double x = -gamepad1.left_stick_x;
             double h = -gamepad1.right_stick_x;
@@ -40,6 +45,8 @@ public class TwoFlywheelTester extends LinearOpMode {
             fl.setPower(Range.clip(y + x + h, -1, 1));
             br.setPower(Range.clip(y + x - h, -1, 1));
             bl.setPower(Range.clip(y - x + h, -1, 1));
+
+            intake.setPower(intakePower);
             shooter1.setVelocity(shooterPower1);
             shooter2.setVelocity(shooterPower2);
             telemetry.addData("Motor 1 Shooter Power:",60/28*shooter1.getVelocity());
